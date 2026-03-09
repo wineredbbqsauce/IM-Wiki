@@ -1,3 +1,5 @@
+##### Ideen
+
 wiki type shit
 miks av wiki og twitter
 
