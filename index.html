@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="nb">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>IM Wiki</title>
+    <link rel="icon" type="IM Logo" href="assets/IM_logo_rund.png" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Source+Serif+4:wght@300;400;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <!--    
+        ##########################################
+        #                                        #
+        #                 NAV                    #
+        #                                        #
+        ##########################################
+-->
+    <nav>
+      <div style="display: flex; align-items: center; gap: 0.8rem">
+        <span class="nav-logo">IM <span>Wiki</span></span>
+        <span class="nav-sep">|</span>
+        <span class="nav-ver">v2026</span>
+      </div>
+      <div class="nav-right">
+        <button class="btn-new hidden" id="btnNewPost" onclick="openNewPost()">
+          + Ny post
+        </button>
+        <button class="btn-admin hidden" id="btnAdmin" onclick="toggleAdmin()">
+          ⚙ Admin
+        </button>
+        <select
+          class="user-select"
+          id="userSelect"
+          onchange="switchUser(this.value)"
+        ></select>
+      </div>
+    </nav>
+
+    <!--
+        ##########################################
+        #                                        #
+        #                LAYOUT                  #
+        #                                        #
+        ##########################################
+-->
+    <div class="layout">
+      <!-- SIDEBAR -->
+
+      <aside>
+        <div class="sidebar-sticky">
+          <div class="sidebar-box">
+            <div class="sidebar-head">Kategorier</div>
+            <div id="catButtons"></div>
+          </div>
+          <div class="sidebar-box user-box">
+            <div class="label">Innlogget som</div>
+            <div class="name" id="sidebarName"></div>
+            <div class="role-badge" id="sidebarRole"></div>
+          </div>
+        </div>
+      </aside>
+
+      <!--
+        ##########################################
+        #                                        #
+        #                 MAIN                   #
+        #                                        #
+        ##########################################
+-->
+      <main id="mainFeed">
+        <!-- Admin Panel -->
+        <div class="panel hidden" id="adminPanel">
+          <h2>⚙ Administrasjon – Roller</h2>
+          <div id="adminUserList"></div>
+        </div>
+
+        <!-- New Post Panel -->
+        <div class="panel hidden" id="newPostPanel">
+          <h2>+ Ny Post</h2>
+          <div class="form-row">
+            <input
+              class="form-input"
+              id="npTitle"
+              placeholder="Tittel..."
+              oninput="updatePublishBtn()"
+            />
+            <select class="form-select" id="npCategory">
+              <option>BS</option>
+              <option>Utvikling</option>
+              <option>DS</option>
+            </select>
+          </div>
+          <textarea
+            class="form-textarea"
+            id="npContent"
+            rows="8"
+            placeholder="Innhold... (støtter **fet**, `kode`, ## Overskrift, - liste)"
+            oninput="updatePublishBtn()"
+          ></textarea>
+          <div class="form-row" style="margin-top: 0.6rem">
+            <input
+              class="form-input"
+              id="npLink"
+              placeholder="Lenke (valgfritt)..."
+            />
+            <input
+              class="form-input"
+              id="npLinkText"
+              placeholder="Lenketekst..."
+            />
+          </div>
+          <div class="form-actions">
+            <button class="btn-cancel" onclick="closeNewPost()">Avbryt</button>
+            <button
+              class="btn-publish"
+              id="btnPublish"
+              onclick="publishPost()"
+              disabled
+            >
+              Publiser
+            </button>
+          </div>
+        </div>
+
+        <!--
+        ##########################################
+        #                                        #
+        #                 FEED                   #
+        #                                        #
+        ##########################################
+-->
+        <div id="feed"></div>
+      </main>
+    </div>
+
+    <!-- Edit Modal -->
+    <div class="modal-overlay hidden" id="editModal">
+      <div class="modal-box">
+        <h2>Rediger Post</h2>
+        <input
+          class="form-input"
+          id="editTitle"
+          style="margin-bottom: 0.8rem"
+        />
+        <textarea class="form-textarea" id="editContent" rows="10"></textarea>
+        <div class="form-row" style="margin-top: 0.6rem">
+          <input class="form-input" id="editLink" placeholder="Lenke..." />
+          <input
+            class="form-input"
+            id="editLinkText"
+            placeholder="Lenketekst..."
+          />
+        </div>
+        <div class="form-actions" style="margin-top: 1rem">
+          <button class="btn-cancel" onclick="closeEdit()">Avbryt</button>
+          <button class="btn-publish" onclick="saveEdit()">Lagre</button>
+        </div>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
