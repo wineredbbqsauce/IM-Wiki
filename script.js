@@ -120,14 +120,34 @@ function renderFeed() {
     feed.innerHTML = `<div class="empty">Ingen poster i denne kategorien enda.</div>`;
     return;
   }
-  const pinned = filtered.find((p) => p.pinned) || filtered[0];
-  const older = filtered.filter((p) => p.id !== pinned.id);
+  // const pinned = filtered.find((p) => p.pinned) || filtered[0];
+  // const older = filtered.filter((p) => p.id !== pinned.id);
 
-  // -- Featured divider --
-  feed.appendChild(makeDivider("📌 Fremhevet post"));
-  feed.appendChild(makePostCard(pinned, true));
+  // // -- Featured divider --
+  // feed.appendChild(makeDivider("📌 Fremhevet post"));
+  // feed.appendChild(makePostCard(pinned, true));
 
-  if (older.length > 0) {
+  // if (older.length > 0) {
+  //   feed.appendChild(makeDivider("Eldre Poster"));
+  //   older.forEach((p) => feed.appendChild(makePostCard(p, false)));
+  // }
+
+  const pinned = filtered.find((p) => p.pinned) || null;
+  const unpinned = filtered.filter((p) => !p.pinned);
+  const newest = unpinned[0] || null;
+  const older = unpinned.slice(1);
+
+  if (pinned) {
+    feed.appendChild(makeDivider("📌Fremhevet Post"));
+    feed.appendChild(makePostCard(pinned, true));
+  }
+
+  if (newest) {
+    feed.appendChild(makeDivider("🆕 Ny Post"));
+    feed.appendChild(makePostCard(newest, true));
+  }
+
+  if (older.length) {
     feed.appendChild(makeDivider("Eldre Poster"));
     older.forEach((p) => feed.appendChild(makePostCard(p, false)));
   }
