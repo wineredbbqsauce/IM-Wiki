@@ -568,3 +568,13 @@ main {
 .hidden {
   display: none !important;
 }
+
+.btn-pin {
+  background: #fffde7;
+  border: 1px solid #fff176;
+  border-radius: 6px;
+  padding: 3px 10px;
+  font-size: 0.78rem;
+  cursor: pointer;
+  color: #f57f17;
+}

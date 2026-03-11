@@ -78,7 +78,11 @@
           <div id="adminUserList"></div>
         </div>
 
-        <!-- New Post Panel -->
+        <!------------- 
+        
+        New Post Panel
+        
+        ---------------->
         <div class="panel hidden" id="newPostPanel">
           <h2>+ Ny Post</h2>
           <div class="form-row">
@@ -114,6 +118,17 @@
             />
           </div>
           <div class="form-actions">
+            <label
+              style="
+                display: flex;
+                align-items: center;
+                gap: 0.4rem;
+                font-size: 0.85rem;
+                cursor: pointer;
+              "
+            >
+              <input type="checkbox" id="npPinned" /> 📌 Fremhev post
+            </label>
             <button class="btn-cancel" onclick="closeNewPost()">Avbryt</button>
             <button
               class="btn-publish"

@@ -213,7 +213,7 @@ function makePostCard(post, featured) {
     <div class="post-footer">
       ${!featured ? `<button class="btn-read-more" onclick="toggleExpand(${post.id})">${isExp ? "▲ Skjul" : "▼ Les mer"}</button>` : ""}
       <div class="post-actions">
-        ${canEdit ? `<button class="btn-edit" onclick="openEdit(${post.id})">✏️ Rediger</button><button class="btn-delete" onclick="deletePost(${post.id})">🗑️ Slett</button>` : ""}
+        ${canEdit ? `    <button class="btn-pin" onclick="togglePin(${post.id})">${post.pinned ? "📌 Fjern fremheving" : "📌 Fremhev"}</button><button class="btn-edit" onclick="openEdit(${post.id})">✏️ Rediger</button><button class="btn-delete" onclick="deletePost(${post.id})">🗑️ Slett</button>` : ""}
       </div>
     </div>
   `;
@@ -305,8 +305,9 @@ function publishPost() {
     link: document.getElementById("npLink").value.trim() || null,
     linkText: document.getElementById("npLinkText").value.trim() || null,
     date: new Date().toISOString(),
-    pinned: false,
+    pinned: document.getElementById("npPinned").checked,
   };
+  if (post.pinned) posts = posts.map((p) => ({ ...p, pinned: false }));
   posts.unshift(post);
   closeNewPost();
   renderAll();
@@ -361,6 +362,13 @@ function makeDivider(label) {
   dih.className = "divider";
   dih.innerHTML = `<div class="divider-line"></div><span class="divider-label">${label}</span><div class="divider-line"></div>`;
   return dih;
+}
+
+// -- Toggle Pin --
+function togglePin(id) {
+  // BARE EN POST KAN VÆRE PINNED OM GANGEN
+  posts = posts.map((p) => ({ ...p, pinned: p.id === id ? !p.pinned : false }));
+  renderAll();
 }
 
 init();
