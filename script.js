@@ -1,5 +1,5 @@
 const USERS = [
-  { id: 1, name: "Elev Mathias", role: "Elev" },
+  { id: 1, name: "Mathias", role: "Elev" },
   { id: 2, name: "Simen", role: "Lærer" },
   { id: 3, name: "Tarald", role: "Lærer" },
   { id: 4, name: "Aksel", role: "Lærer" },
