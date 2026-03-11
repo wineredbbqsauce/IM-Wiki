@@ -1,19 +1,117 @@
 const USERS = [
-  { id: 1, name: "Elev Mathias", role: "Elev" },
-  { id: 2, name: "Simen", role: "Lærer" },
-  { id: 3, name: "Tarald", role: "Lærer" },
-  { id: 4, name: "Aksel", role: "Lærer" },
-  { id: 5, name: "Christian", role: "Admin" },
+  { id: 1, name: "Elev Ola", role: "Elev" },
+  { id: 2, name: "Fru Hansen", role: "Lærer" },
+  { id: 3, name: "Hr. Olsen", role: "Lærer" },
+  { id: 4, name: "Fru Lindgren", role: "Lærer" },
+  { id: 5, name: "Rektor Berg", role: "Admin" },
 ];
 
-const INITIAL_POSTS = [];
+const INITIAL_POSTS = [
+  {
+    id: 1,
+    author: "Fru Hansen",
+    authorRole: "Lærer",
+    category: "BS",
+    title: "Introduksjon til Bærekraftig Utvikling",
+    content: `Bærekraftig utvikling handler om å møte dagens behov uten å gå på kompromiss med fremtidige generasjoners muligheter til å møte sine behov.
+
+## Tre Pilarer
+
+**Miljø** – Bevaring av naturressurser og reduksjon av forurensning er grunnleggende. Vi må tenke langsiktig om klima, hav og skog.
+
+**Økonomi** – En sunn økonomi som skaper arbeidsplasser og velstand, men innenfor planetens tålegrenser.
+
+**Sosialt** – Rettferdighet, helse og livskvalitet for alle mennesker, uansett bakgrunn.
+
+## FNs Bærekraftsmål
+
+FN har vedtatt 17 mål som skal nås innen 2030. Norge er spesielt aktive på mål 13 (Klimahandling) og mål 14 (Livet i havet).`,
+    link: "https://fn.no/om-fn/fns-baerekraftsmaal",
+    linkText: "Les mer om FNs mål",
+    date: "2025-03-08T09:15:00",
+    pinned: true,
+  },
+  {
+    id: 2,
+    author: "Hr. Olsen",
+    authorRole: "Lærer",
+    category: "Utvikling",
+    title: "Git & Versjonskontroll – Grunnleggende",
+    content: `Git er verdens mest brukte versjonskontrollsystem. Det lar deg spore endringer i kode over tid og samarbeide med andre.
+
+## Viktige Kommandoer
+
+\`git init\` – Starter et nytt repository
+\`git add .\` – Legger til alle filer i staging
+\`git commit -m "melding"\` – Lagrer en versjon
+\`git push\` – Sender til GitHub
+
+## Hvorfor Bruke Git?
+
+Du kan alltid gå tilbake til en tidligere versjon hvis noe går galt. Det er som en uendelig angre-knapp for koden din.`,
+    link: null,
+    linkText: null,
+    date: "2025-03-07T13:30:00",
+    pinned: false,
+  },
+  {
+    id: 3,
+    author: "Fru Lindgren",
+    authorRole: "Lærer",
+    category: "DS",
+    title: "Datasikkerhet: Passord og Autentisering",
+    content: `Et sterkt passord er din første forsvarslinje mot hackere og uautorisert tilgang.
+
+## Hva Gjør et Passord Sterkt?
+
+- **Lengde**: Minst 12 tegn
+- **Variasjon**: Store og små bokstaver, tall og symboler
+- **Unikt**: Aldri gjenbruk passord på tvers av tjenester
+
+## To-Faktor Autentisering (2FA)
+
+2FA legger til et ekstra lag av sikkerhet. Selv om noen får tak i passordet ditt, trenger de fremdeles tilgang til telefonen din for å logge inn.
+
+## Passordadministratorer
+
+Verktøy som Bitwarden eller 1Password genererer og lagrer sterke, unike passord for deg.`,
+    link: "https://www.norsis.no",
+    linkText: "NorSIS – Norsk senter for informasjonssikring",
+    date: "2025-03-06T10:00:00",
+    pinned: false,
+  },
+  {
+    id: 4,
+    author: "Hr. Olsen",
+    authorRole: "Lærer",
+    category: "Utvikling",
+    title: "HTML & CSS: Bygg Din Første Nettside",
+    content: `HTML (HyperText Markup Language) definerer strukturen på en nettside, mens CSS (Cascading Style Sheets) styrer utseendet.
+
+## Grunnleggende HTML
+
+\`<h1>\` til \`<h6>\` er overskrifter. \`<p>\` er avsnitt. \`<a href="...">\` er lenker. \`<img src="...">\` viser bilder.
+
+## CSS Selektorer
+
+Du kan style elementer via **tag** (\`p { color: red; }\`), **klasse** (\`.min-klasse {}\`) eller **ID** (\`#mitt-id {}\`).
+
+## Responsivt Design
+
+Med media queries kan du tilpasse layouten til ulike skjermstørrelser – fra mobil til stor desktop.`,
+    link: null,
+    linkText: null,
+    date: "2025-03-05T08:45:00",
+    pinned: false,
+  },
+];
 
 const CAT_COLORS = {
   BS: { bg: "#e8f5e9", text: "#2e7d32", border: "#a5d6a7" },
   Utvikling: { bg: "#e3f2fd", text: "#1565c0", border: "#90caf9" },
   DS: { bg: "#fce4ec", text: "#880e4f", border: "#f48fb1" },
 };
-const CATEGORIES = ["Alle", "Brukerstøtte", "Utvikling", "Driftsstøtte"];
+const CATEGORIES = ["Alle", "BS", "Utvikling", "DS"];
 const CAT_ICONS = { Alle: "📚", BS: "🌿", Utvikling: "💻", DS: "🔒" };
 
 let posts = JSON.parse(JSON.stringify(INITIAL_POSTS));
@@ -24,7 +122,7 @@ let editingId = null;
 let managedUsers = USERS.filter((u) => u.role !== "Admin");
 let adminOpen = false;
 
-// -- INIT --
+// ── INIT ───────────────────────────────────────────────
 function init() {
   const sel = document.getElementById("userSelect");
   USERS.forEach((u) => {
@@ -36,7 +134,7 @@ function init() {
   renderAll();
 }
 
-// -- Switch User --
+// ── SWITCH USER ────────────────────────────────────────
 function switchUser(id) {
   currentUser = USERS.find((u) => u.id == id);
   adminOpen = false;
@@ -45,14 +143,13 @@ function switchUser(id) {
   renderAll();
 }
 
-// -- Render All --
+// ── RENDER ALL ─────────────────────────────────────────
 function renderAll() {
   renderNav();
   renderSidebar();
   renderFeed();
 }
 
-// -- Render Nav --
 function renderNav() {
   const btnNew = document.getElementById("btnNewPost");
   const btnAdmin = document.getElementById("btnAdmin");
@@ -61,9 +158,8 @@ function renderNav() {
   btnAdmin.classList.toggle("active", adminOpen);
 }
 
-// -- Render Sidebar --
 function renderSidebar() {
-  // categories
+  // Categories
   const container = document.getElementById("catButtons");
   container.innerHTML = "";
   CATEGORIES.forEach((cat) => {
@@ -83,11 +179,12 @@ function renderSidebar() {
       activeCategory = cat;
       renderAll();
     };
+    container.appendChild(btn);
   });
 
-  // -- USER --
+  // User
   document.getElementById("sidebarName").textContent = currentUser.name;
-  const badge = document.getElementById("sideBarRole");
+  const badge = document.getElementById("sidebarRole");
   badge.textContent = currentUser.role;
   const roleColors = {
     Admin: { bg: "#fff3e0", text: "#e65100" },
@@ -99,7 +196,6 @@ function renderSidebar() {
   badge.style.color = rc.text;
 }
 
-// -- Render Feed --
 function renderFeed() {
   const feed = document.getElementById("feed");
   feed.innerHTML = "";
@@ -114,20 +210,21 @@ function renderFeed() {
     feed.innerHTML = `<div class="empty">Ingen poster i denne kategorien enda.</div>`;
     return;
   }
+
   const pinned = filtered.find((p) => p.pinned) || filtered[0];
   const older = filtered.filter((p) => p.id !== pinned.id);
 
-  // -- Featured divider --
+  // Featured divider
   feed.appendChild(makeDivider("📌 Fremhevet post"));
   feed.appendChild(makePostCard(pinned, true));
 
   if (older.length > 0) {
-    feed.appendChild(makeDivider("Edlre Poster"));
+    feed.appendChild(makeDivider("Eldre poster"));
     older.forEach((p) => feed.appendChild(makePostCard(p, false)));
   }
 }
 
-// -- Admin Panel --
+// ── ADMIN PANEL ────────────────────────────────────────
 function renderAdminPanel() {
   const panel = document.getElementById("adminPanel");
   panel.classList.remove("hidden");
@@ -137,7 +234,8 @@ function renderAdminPanel() {
     const row = document.createElement("div");
     row.className = "admin-user-row";
     const isElev = u.role === "Elev";
-    row.innerHTML = `<div>
+    row.innerHTML = `
+      <div>
         <span style="font-weight:600;font-size:0.9rem">${u.name}</span>
         <span style="margin-left:0.5rem;font-size:0.8rem;color:#888">(${u.role})</span>
       </div>
@@ -149,7 +247,6 @@ function renderAdminPanel() {
   });
 }
 
-// -- Toggle Admin --
 function toggleAdmin() {
   adminOpen = !adminOpen;
   const panel = document.getElementById("adminPanel");
@@ -158,7 +255,6 @@ function toggleAdmin() {
   renderFeed();
 }
 
-// -- Toggle Role --
 function toggleRole(uid) {
   managedUsers = managedUsers.map((u) =>
     u.id === uid ? { ...u, role: u.role === "Elev" ? "Lærer" : "Elev" } : u,
@@ -166,7 +262,7 @@ function toggleRole(uid) {
   renderAdminPanel();
 }
 
-// -- POST CARD --
+// ── POST CARD ──────────────────────────────────────────
 function makePostCard(post, featured) {
   const col = CAT_COLORS[post.category] || {};
   const isExp = expandedPosts.has(post.id);
@@ -175,10 +271,10 @@ function makePostCard(post, featured) {
     (currentUser.role === "Lærer" && post.author === currentUser.name);
 
   const card = document.createElement("div");
-  card.className = "post-card" + (featured ? "featured" : "");
+  card.className = "post-card" + (featured ? " featured" : "");
   card.id = "card-" + post.id;
 
-  // HEADER
+  // Header
   const initials = post.author
     .split(" ")
     .map((w) => w[0])
@@ -214,21 +310,20 @@ function makePostCard(post, featured) {
   return card;
 }
 
-// -- Toggle Epand --
 function toggleExpand(id) {
   if (expandedPosts.has(id)) expandedPosts.delete(id);
   else expandedPosts.add(id);
   renderFeed();
 }
 
-// -- Content Renderer --
+// ── CONTENT RENDERER ───────────────────────────────────
 function renderContent(text) {
   return text
     .split("\n")
     .map((line) => {
-      if (line.startsWith("##"))
-        return `<div class"wiki-h3">${parseBold(esc(line.slice(3)))}</div>`;
-      if (line.startsWith("-"))
+      if (line.startsWith("## "))
+        return `<div class="wiki-h3">${parseBold(esc(line.slice(3)))}</div>`;
+      if (line.startsWith("- "))
         return `<li class="wiki-li">${parseBold(esc(line.slice(2)))}</li>`;
       if (line.trim() === "") return "<br/>";
       return `<p class="wiki-p">${parseBold(esc(line))}</p>`;
@@ -236,26 +331,23 @@ function renderContent(text) {
     .join("");
 }
 
-// -- ParseBold
 function parseBold(html) {
   return html
     .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
     .replace(/`(.+?)`/g, `<code class="wiki-code">$1</code>`);
 }
 
-// -- esc --
 function esc(str) {
   if (!str) return "";
   return String(str)
-    .replace(/&/g, "&amp")
+    .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;");
 }
 
-// -- Format Date --
 function formatDate(ds) {
-  return new Date(ds).toDateString("nb-NO", {
+  return new Date(ds).toLocaleDateString("nb-NO", {
     day: "numeric",
     month: "long",
     year: "numeric",
@@ -264,8 +356,7 @@ function formatDate(ds) {
   });
 }
 
-// -- NEW POST --
-
+// ── NEW POST ───────────────────────────────────────────
 function openNewPost() {
   document.getElementById("newPostPanel").classList.remove("hidden");
   document.getElementById("npTitle").value = "";
@@ -275,19 +366,16 @@ function openNewPost() {
   updatePublishBtn();
 }
 
-// -- Close NEW POST
 function closeNewPost() {
   document.getElementById("newPostPanel").classList.add("hidden");
 }
 
-// -- Update Publish button
 function updatePublishBtn() {
   const t = document.getElementById("npTitle").value.trim();
   const c = document.getElementById("npContent").value.trim();
-  document.getElementById("btnPublish").disable = !(t && c);
+  document.getElementById("btnPublish").disabled = !(t && c);
 }
 
-// -- Publish Post
 function publishPost() {
   const post = {
     id: Date.now(),
@@ -301,12 +389,12 @@ function publishPost() {
     date: new Date().toISOString(),
     pinned: false,
   };
-  post.unshift(post);
+  posts.unshift(post);
   closeNewPost();
   renderAll();
 }
 
-// -- EDIT --
+// ── EDIT ───────────────────────────────────────────────
 function openEdit(id) {
   editingId = id;
   const p = posts.find((x) => x.id === id);
@@ -317,20 +405,18 @@ function openEdit(id) {
   document.getElementById("editModal").classList.remove("hidden");
 }
 
-// -- Close EDIT --
 function closeEdit() {
   document.getElementById("editModal").classList.add("hidden");
   editingId = null;
 }
 
-// -- Save Edit--
 function saveEdit() {
   posts = posts.map((p) =>
     p.id !== editingId
       ? p
       : {
           ...p,
-          title: document.getElementById("editTitle").valuet.trim(),
+          title: document.getElementById("editTitle").value.trim(),
           content: document.getElementById("editContent").value.trim(),
           link: document.getElementById("editLink").value.trim() || null,
           linkText:
@@ -341,7 +427,7 @@ function saveEdit() {
   renderAll();
 }
 
-// -- DELETE --
+// ── DELETE ─────────────────────────────────────────────
 function deletePost(id) {
   if (!confirm("Vil du slette denne posten?")) return;
   posts = posts.filter((p) => p.id !== id);
@@ -349,12 +435,12 @@ function deletePost(id) {
   renderAll();
 }
 
-// -- DIVIDER HERE --
+// ── DIVIDER HELPER ─────────────────────────────────────
 function makeDivider(label) {
-  const dih = document.getElementById("div");
-  dih.className = "divider";
-  dih.innerHTML = `<div class="divider-line"></div><span class="divider-label">${label}</span><div class="divider-line"></div>`;
-  return dih;
+  const d = document.createElement("div");
+  d.className = "divider";
+  d.innerHTML = `<div class="divider-line"></div><span class="divider-label">${label}</span><div class="divider-line"></div>`;
+  return d;
 }
 
 init();
