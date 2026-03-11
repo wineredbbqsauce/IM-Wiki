@@ -1,4 +1,6 @@
-##### Ideen
+![Alt Tekst](./assets/IDEEN.png)
+
+<!-- ##### Ideen -->
 
 wiki type shit
 miks av wiki og twitter
